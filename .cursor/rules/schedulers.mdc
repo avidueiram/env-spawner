@@ -1,0 +1,80 @@
+---
+description: Defines basic interaction rules for schedulers
+alwaysApply: false
+---
+
+# Schedulers
+
+Schedulers are located in the `src/schedulers` directory.
+
+## Create a new scheduler
+
+Create file with the following name: `sample-action.scheduler.ts`, and follow these rules:
+
+- Always ask for the name of the scheduler to confirm it is correct, don't start writing anything until you have the name.
+- Function name: `sampleActionSchedulerFunction`
+- Use the following template:
+
+```typescript
+import { ok, Result } from 'neverthrow';
+import { cloudFunctionsConfig } from '../constants/cloud-functions.constants';
+import { environment } from '../environments/environment';
+import { Logger } from '../utils/logging.utils';
+import { GenericError } from '../utils/result.utils';
+import { schedulerFunction } from '../utils/scheduler.utils';
+
+export const sampleActionSchedulerFunction = schedulerFunction({
+  environment,
+  function: scheduledJob,
+  options: {
+    ...cloudFunctionsConfig.scheduler,
+  },
+  schedule: '0 3 * * *', // every day at 3:00 AM // TODO: change to your needs
+});
+
+export async function scheduledJob(logger: Logger): Promise<Result<void, GenericError>> {
+  return ok();
+}
+```
+
+- After creating the scheduler, add it to the `src/index.ts` file as follows:
+
+```typescript
+export const something = {
+  // ...
+  schedulers: {
+    // ...
+    sampleAction: sampleActionSchedulerFunction,
+  },
+};
+```
+
+- Create a new test file in `tests/schedulers` with the following name: `sample-action.scheduler.test.ts`, with this template:
+
+```typescript
+import { environment } from '../../src/environments/environment';
+import { scheduledJob } from '../../src/schedulers/sample-action.scheduler';
+import { createLogger } from '../../src/utils/logging.utils';
+import { initializeTestApp } from '../utils/firebase.utils';
+
+describe('sampleActionScheduler', () => {
+  beforeAll(() => initializeTestApp(environment.gcloudProject));
+  it('should return ok and ...', async () => {
+    const result = await scheduledJob(createLogger());
+    expect(result.isOk()).toBe(true);
+  });
+});
+```
+
+- Finally, add it to docs in `docs/schedulers/README.md`, in here (it should order alphabetically):
+
+```markdown
+...
+
+### Available functions
+
+- `generateMortgageSimulationsReport`: Generates the mortgage simulations report.
+- `sampleAction`: Does the action.
+- `updateIndicators`: Updates the platform indicators.
+
+```

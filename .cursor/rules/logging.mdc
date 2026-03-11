@@ -1,0 +1,67 @@
+---
+description: Defines basic interaction rules for logging server code
+alwaysApply: false
+---
+
+# Logging
+
+- Use `Logger` for logging, which is located in `utils/logging.utils.ts`.
+- Don't overuse the logger, use it for useful information, not for debugging.
+- Use `startStep` and `endStep` to log the time elapsed for asynchronous operations.
+  - If `startStep` or `endStep` aren't available, use `changeStep` instead.
+
+## Monitoring performance
+
+These functions generate logs that measure the total time elapsed during execution, making it easier to identify and troubleshoot slow operations.
+
+Use meaningful step names to clearly indicate the operation being monitored (e.g., `'update-user'`, `'get-pull-requests'`).
+
+### startStep/endStep
+
+Wrap asynchronous calls with the `startStep` and `endStep`, the recommended approach for group name is to use the class name combined with the function name (e.g., `${ClassName}.${functionName}`), or at minimum, the function name itself.
+
+Always ensure `endStep` is called, even in error scenarios, to maintain accurate performance logs.
+
+```typescript
+async function someFunction(logger: Logger): Promise<void> {
+  logger.startStep('get-open-pull-requests', someFunction.name);
+  const getDocumentsListResult = await pullRequestsService.getDocumentsList(db, [
+    { condition: '==', field: 'status', value: 'open' },
+  ]).finally(() => logger.endStep('get-open-pull-requests', someFunction.name));
+  // ...
+  logger.startStep('update-pull-request', someFunction.name);
+  await pullRequestsService.updateDocument(db, pullRequest.id, { status: 'closed' }).finally(() => logger.endStep('update-pull-request', someFunction.name));
+}
+```
+
+### changeStep
+
+On asynchronous calls add `changeStep` just before the call.
+
+```typescript
+async function someFunction(logger: Logger): Promise<void> {
+  logger.changeStep('get-open-pull-requests');
+  const getDocumentsListResult = await pullRequestsService.getDocumentsList(db, [
+    { condition: '==', field: 'status', value: 'open' },
+  ]);
+  logger.changeStep('update-pull-request');
+  await pullRequestsService.updateDocument(db, pullRequest.id, { status: 'closed' });
+}
+```
+
+### Error handling
+
+When an error occurs, use `error` to log the error, describe the error in the message and add the event name to the log according to the last step or context.
+
+```typescript
+async function someFunction(logger: Logger): Promise<void> {
+  logger.startStep('get-open-pull-requests', someFunction.name);
+  const getDocumentsListResult = await pullRequestsService.getDocumentsList(db, [
+    { condition: '==', field: 'status', value: 'open' },
+  ]).finally(() => logger.endStep('get-open-pull-requests', someFunction.name));
+  if (getDocumentsListResult.isErr()) {
+    logger.error('Error occurred while getting open pull requests.', { error: getDocumentsListResult.error, eventName: 'get-open-pull-requests-error' });
+    return err(getDocumentsListResult.error);
+  }
+}
+```

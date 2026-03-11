@@ -1,0 +1,10 @@
+services:
+  env-spawner:
+    image: env-spawner
+    pull_policy: never
+    container_name: env-spawner
+    command: sh
+    stdin_open: true
+    tty: true
+    labels:
+      env-spawner: true

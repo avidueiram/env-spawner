@@ -1,0 +1,108 @@
+---
+description: Defines basic interaction rules for sub-collections
+alwaysApply: false
+---
+
+# Sub-collections
+
+Sub-collections are located in the `src/collections` directory.
+
+Database collection services are located in the `src/services/database` directory.
+
+## Create a new sub-collection
+
+Always ask for the name of the sub-collection and parent collection to confirm it is correct, don't start writing anything until you have both names.
+
+- If the sub-collection name already have the parent collection name in it, remove it, for example:
+  - Parent collection: `users`
+  - Sub-collection: `user-messages`
+  - Sub-collection name would be: `messages`
+- File name: `{parent in singular form}-{sub-collection in singular form}.collection.ts`, for example:
+  - Parent collection: `users`
+  - Sub-collection: `messages`
+  - File name would be: `user-message.collection.ts` (use singular form)
+- Interface name: `{Parent in singular form}{Sub-collection in singular form}`, for example:
+  - Parent collection: `users`
+  - Sub-collection: `messages`
+  - Interface name would be: `UserMessage` (use singular form)
+- Use the following template and don't add any other fields:
+
+```typescript
+export interface UserMessage {
+  additionalData: Record<string, unknown>;
+  createdAt: Date;
+  id: string;
+  updatedAt: Date;
+}
+```
+
+- After creating the sub-collection, create the file for the service: `{parent in singular form}-{sub-collection in plural form}.service.ts`, for example:
+  - Parent collection: `users`
+  - Sub-collection: `messages`
+  - File name would be: `user-messages.service.ts` (use singular and plural form)
+- Use the following template:
+
+```typescript
+import { Transaction, WriteBatch } from 'firebase-admin/firestore';
+import { Result } from 'neverthrow';
+import { UserMessage } from '../../collections/user-message.collection';
+import { Logger } from '../../utils/logging.utils';
+import { GenericError } from '../../utils/result.utils';
+import { CollectionService } from '../collection.service';
+import { DatabaseService } from '../database.service';
+
+type UserMessageCreateData = Omit<UserMessage, 'createdAt' | 'id' | 'updatedAt'>;
+
+type UserMessageUpdateData = UserMessageUpdateAdditionalData;
+
+type UserMessageUpdateAdditionalData = Pick<UserMessage, 'additionalData'>;
+
+export class UserMessagesService extends CollectionService<UserMessage> {
+  private static instance: UserMessagesService;
+  static getInstance(): UserMessagesService {
+    if (!UserMessagesService.instance) {
+      // Use the parent collection name and the sub-collection name to create the path, remove this comment after creating the service
+      UserMessagesService.instance = new UserMessagesService('users/userMessages');
+    }
+    return UserMessagesService.instance;
+  }
+
+  override createDocument(db: DatabaseService, data: UserMessageCreateData, logger: Logger, config?: {
+    id?: string;
+    parentId?: string;
+  }): Promise<Result<string, GenericError>>;
+  override createDocument(db: DatabaseService, data: UserMessageCreateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    id?: string;
+    parentId?: string;
+    transaction?: Transaction;
+  }): Result<string, GenericError>;
+  override createDocument(db: DatabaseService, data: UserMessageCreateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    id?: string;
+    parentId?: string;
+    transaction?: Transaction;
+  }): Promise<Result<string, GenericError>> | Result<string, GenericError> {
+    return super.createDocument(db, data, logger, config);
+  }
+
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserMessageUpdateData, logger: Logger, config?: {
+    ignoreTimestamp?: boolean;
+    parentId?: string;
+  }): Promise<Result<void, GenericError>>;
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserMessageUpdateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    ignoreTimestamp?: boolean;
+    parentId?: string;
+    transaction?: Transaction;
+  }): Result<void, GenericError>;
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserMessageUpdateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    ignoreTimestamp?: boolean;
+    parentId?: string;
+    transaction?: Transaction;
+  }): Promise<Result<void, GenericError>> | Result<void, GenericError> {
+    return super.updateDocument(db, documentId, updateData, logger, config);
+  }
+}
+```

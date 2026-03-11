@@ -1,0 +1,122 @@
+---
+description: Defines basic interaction rules for webhooks
+alwaysApply: false
+---
+
+# Webhooks
+
+Webhooks are located in the `src/webhooks` directory.
+
+## Create a new webhook
+
+Create file with the following name: `sample-entity.webhook.ts`, and follow these rules:
+
+- Always ask for the name of the webhook to confirm it is correct, don't start writing anything until you have the name.
+- Function name: `sampleEntityWebhookFunction`
+- Use the following template:
+
+```typescript
+import { Request, Response } from 'express';
+import { onRequest } from 'firebase-functions/https';
+import { z } from 'zod';
+import { cloudFunctionsConfig } from '../constants/cloud-functions.constants';
+import { environment } from '../environments/environment';
+import { httpEndpointFunction, respondRequest } from '../utils/http.utils';
+import { Logger } from '../utils/logging.utils';
+
+const bodySchema = z.object({
+  // Create body schema - Leave empty for now, we will add it later
+});
+
+export const sampleEntityWebhookFunction = onRequest({
+  ...cloudFunctionsConfig.http,
+}, (request, response) => httpEndpointFunction(request, response, {
+  isPublic: true,
+  postHandler: async (request: Request, response: Response, logger: Logger): Promise<void> => {
+    // Check for authentication - Leave empty for now, we will add it later
+    logger.startStep('validate-request-body');
+    const validationResult = bodySchema.safeParse(request.body);
+    logger.endStep('validate-request-body');
+    if (!validationResult.success) {
+      logger.error('Invalid request body.', { error: validationResult.error.errors, eventName: 'invalid-parameters' });
+      respondRequest(response, 200, { code: 'success', message: 'Sample entity webhook processed successfully.' }, logger);
+      return;
+    }
+    // Add webhook logic - Leave empty for now, we will add it later
+    respondRequest(response, 200, { code: 'success', message: 'Sample entity webhook processed successfully.' }, logger);
+  },
+}, environment));
+```
+
+- After creating the webhook, add it to the `src/index.ts` file as follows:
+
+```typescript
+export const something = {
+  // ...
+  webhooks: {
+    // ...
+    sampleEntity: sampleEntityWebhookFunction,
+  },
+};
+```
+
+- Create a new test file in `tests/webhooks` with the following name: `sample-entity.webhook.test.ts`, with this template:
+
+```typescript
+import request from 'supertest';
+import { environment } from '../../src/environments/environment';
+import { sampleEntityWebhookFunction } from '../../src/webhooks/sample-entity.webhook';
+import { initializeTestApp } from '../utils/firebase.utils';
+import { createExpressFromCloudFunction } from '../utils/test.utils';
+
+const app = createExpressFromCloudFunction(sampleEntityWebhookFunction);
+
+describe('sampleEntityWebhook', () => {
+  beforeAll(() => initializeTestApp(environment.googleCloud.projectId));
+  it('should return 401 if no authentication is provided', async () => {
+    const { body: { code, message }, statusCode } = await request(app)
+      .post('/')
+      .send();
+    expect(statusCode).toBe(401);
+    expect(code).toBe('unauthorized');
+    expect(message).toBe('Unauthorized.');
+  });
+  it('should return 401 if authentication is provided but is invalid', async () => {
+    const { body: { code, message }, statusCode } = await request(app)
+      .post('/')
+      .send();
+    expect(statusCode).toBe(401);
+    expect(code).toBe('unauthorized');
+    expect(message).toBe('Unauthorized.');
+  });
+  it('should return 200 if authentication is provided and is valid', async () => {
+    const { body: { code, message }, statusCode } = await request(app)
+      .post('/')
+      .send();
+    expect(statusCode).toBe(200);
+    expect(code).toBe('success');
+    expect(message).toBe('Sample entity webhook processed successfully.');
+  });
+});
+```
+
+- Finally, add the base Bruno API client in `docs/api/webhooks/sample-entity.bru`, with this template:
+
+```text
+meta {
+  name: sample-entity
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{apiUrl}}/something-webhooks-sampleEntity
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+  }
+}
+```

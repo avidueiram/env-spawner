@@ -1,0 +1,5 @@
+environments/*.yaml
+!environments/example-a.yaml
+!environments/example-b.yaml
+
+node_modules/

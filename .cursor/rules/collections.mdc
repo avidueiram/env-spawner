@@ -1,0 +1,88 @@
+---
+description: Defines basic interaction rules for collections
+alwaysApply: false
+---
+
+# Collections
+
+Collections are located in the `src/collections` directory.
+
+Database collection services are located in the `src/services/database` directory.
+
+## Create a new collection
+
+Always ask for the name of the collection to confirm it is correct, don't start writing anything until you have the name.
+
+- File name: `user.collection.ts` (use singular form).
+- Interface name: `User` (use singular form).
+- Use the following template and don't add any other fields:
+
+```typescript
+export interface User {
+  additionalData: Record<string, unknown>;
+  createdAt: Date;
+  id: string;
+  updatedAt: Date;
+}
+```
+
+- After creating the collection, create the file for the service: `users.service.ts` (use plural form)
+- Use the following template:
+
+```typescript
+import { Transaction, WriteBatch } from 'firebase-admin/firestore';
+import { Result } from 'neverthrow';
+import { User } from '../../collections/user.collection';
+import { Logger } from '../../utils/logging.utils';
+import { GenericError } from '../../utils/result.utils';
+import { CollectionService } from '../collection.service';
+import { DatabaseService } from '../database.service';
+
+type UserCreateData = Omit<User, 'createdAt' | 'id' | 'updatedAt'>;
+
+type UserUpdateData = UserUpdateAdditionalData;
+
+type UserUpdateAdditionalData = Pick<User, 'additionalData'>;
+
+export class UsersService extends CollectionService<User> {
+  private static instance: UsersService;
+  static getInstance(): UsersService {
+    if (!UsersService.instance) {
+      UsersService.instance = new UsersService('users');
+    }
+    return UsersService.instance;
+  }
+
+  override createDocument(db: DatabaseService, data: UserCreateData, logger: Logger, config?: {
+    id?: string;
+  }): Promise<Result<string, GenericError>>;
+  override createDocument(db: DatabaseService, data: UserCreateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    id?: string;
+    transaction?: Transaction;
+  }): Result<string, GenericError>;
+  override createDocument(db: DatabaseService, data: UserCreateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    id?: string;
+    transaction?: Transaction;
+  }): Promise<Result<string, GenericError>> | Result<string, GenericError> {
+    return super.createDocument(db, data, logger, config);
+  }
+
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserUpdateData, logger: Logger, config?: {
+    ignoreTimestamp?: boolean;
+  }): Promise<Result<void, GenericError>>;
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserUpdateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    ignoreTimestamp?: boolean;
+    transaction?: Transaction;
+  }): Result<void, GenericError>;
+  override updateDocument(db: DatabaseService, documentId: string, updateData: UserUpdateData, logger: Logger, config?: {
+    batch?: WriteBatch;
+    ignoreTimestamp?: boolean;
+    transaction?: Transaction;
+  }): Promise<Result<void, GenericError>> | Result<void, GenericError> {
+    return super.updateDocument(db, documentId, updateData, logger, config);
+  }
+}
+```

@@ -1,0 +1,12 @@
+services:
+  env-spawner:
+    container_name: env-spawner
+    ports:
+      # port forwarding from host to container: - "host-port:container-port"
+      - "4202:4200"
+      - "8102:8100"
+      - "3002:3000"
+    volumes:
+      # volume mapping from host to container: - "host-path:container-path"
+      - /example/host/path/my-project-b:/workspace/my-project
+    working_dir: /workspace

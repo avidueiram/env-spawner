@@ -1,0 +1,19 @@
+{
+  "name": "env-spawner",
+  "version": "1.0.0",
+  "description": "Environment Spawner its a tool to spawn development environments",
+  "main": "index.js",
+  "scripts": {
+    "attach": "./scripts/attach.sh",
+    "build": "docker build -t env-spawner .",
+    "kill": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -f",
+    "list": "docker ps --filter \"label=env-spawner=true\"",
+    "start": "./scripts/start.sh"
+  },
+  "bin": {
+    "env-spawner": "./bin/main.js"
+  },
+  "keywords": [],
+  "author": "Alfredo Vidueira",
+  "license": "ISC"
+}

@@ -1,0 +1,9 @@
+---
+description: Defines basic interaction rules for branching
+alwaysApply: false
+---
+
+# Branching
+
+- Every new feature must be developed in a new branch, branched from `develop` branch and use the following naming convention: `feature/<name>`.
+- For hotfixes, bugfixes or small changes, use the following naming convention: `hotfix/<name>`, branched from `develop`.
