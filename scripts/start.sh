@@ -15,7 +15,7 @@ source "environments/.env.$environment"
 
 echo "[$script_name]▶ Starting environment..."
 if ! docker compose \
-    -p "$project" \
+    -p "$project-$environment" \
     --env-file "environments/.env.$environment" \
     -f "compose.yaml" \
     -f "environments/$project.yaml" \
