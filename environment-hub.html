@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ENVIRONMENT_NAME}} · environment hub</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0 auto;
+      max-width: 960px;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 650;
+      margin: 0 0 0.25rem;
+    }
+
+    .sub {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0 0 1.25rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      background: #fafafa;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card {
+        background: #1e1e1e;
+        border-color: #444;
+      }
+
+      .sub {
+        color: #aaa;
+      }
+    }
+
+    .card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .card ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font: 0.82rem/1.5 ui-monospace, monospace;
+      color: #444;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card ul {
+        color: #bbb;
+      }
+    }
+
+    .muted {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 1.25rem;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>{{ENVIRONMENT_NAME}} · environment hub</h1>
+  <p class="sub">Host → container port map for this compose project.</p>
+  <div class="grid">
+    <article class="card">
+      <h2>app</h2>
+      <ul>
+        <li><a href="http://localhost:{{APP_PORT}}" target="_blank">{{APP_PORT}} ↗️</a></li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>server</h2>
+      <ul>
+        <li><a href="http://localhost:{{SERVER_PORT}}" target="_blank">{{SERVER_PORT}} ↗️</a></li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>database</h2>
+      <ul>
+        <li><a href="https://local.drizzle.studio/?port={{DATABASE_STUDIO}}" target="_blank">{{DATABASE_STUDIO}} ↗️</a></li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>firebase</h2>
+      <ul>
+        <li><a href="http://localhost:{{FIREBASE_UI_PORT}}" target="_blank">{{FIREBASE_UI_PORT}} ↗️</a></li>
+      </ul>
+    </article>
+  </div>
+</body>
+
+</html>
