@@ -23,6 +23,8 @@ services:
           -e "s#{{FIREBASE_FIRESTORE_PORT}}#${FIREBASE_FIRESTORE_PORT}#g" \
           -e "s#{{FIREBASE_STORAGE_PORT}}#${FIREBASE_STORAGE_PORT}#g" \
           -e "s#{{FIREBASE_UI_PORT}}#${FIREBASE_UI_PORT}#g" \
+          -e "s#{{OPENCODE_APP_PORT}}#${OPENCODE_APP_PORT}#g" \
+          -e "s#{{OPENCODE_SERVER_PORT}}#${OPENCODE_SERVER_PORT}#g" \
           -e "s#{{ENVIRONMENT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
           /var/templates/environment-hub.html >/www/index.html &&
         exec npx --yes http-server /www -p 8080 -a 0.0.0.0 --silent -c-1

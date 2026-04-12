@@ -46,15 +46,6 @@
       padding: clamp(1rem, 2vw, 1.6rem);
     }
 
-    .brandline {
-      height: 4px;
-      width: 212px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #4285f4 0 25%, #34a853 25% 50%, #fbbc05 50% 75%, #ea4335 75% 100%);
-      margin-bottom: 1rem;
-      opacity: 0.92;
-    }
-
     .top {
       display: flex;
       flex-wrap: wrap;
@@ -105,12 +96,10 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       background: var(--surface-high);
-      padding: 0.58rem 0.75rem;
-      min-width: 180px;
+      padding: 0.58rem 0.75rem 0.58rem 1.75rem;
       text-align: right;
       font-size: 0.74rem;
       letter-spacing: 0.08em;
-      text-transform: uppercase;
       color: var(--muted);
       font-weight: 600;
     }
@@ -148,11 +137,15 @@
       margin: 0.72rem 0 0;
       padding: 0;
       list-style: none;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .card a {
       display: inline-flex;
       align-items: center;
+      gap: 0.35rem;
       width: fit-content;
       text-decoration: none;
       border-radius: 999px;
@@ -162,6 +155,12 @@
       background: var(--surface-higher);
       border: 1px solid var(--border);
       transition: border-color 140ms ease, transform 140ms ease;
+    }
+
+    .card a svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      flex: 0 0 auto;
     }
 
     .card a:hover {
@@ -238,7 +237,7 @@
         <p class="sub">Host to container port map for this compose project.</p>
       </div>
       <div class="stamp">
-        workspace
+        Workspace
         <b>{{ENVIRONMENT_NAME}}</b>
       </div>
     </section>
@@ -247,25 +246,32 @@
       <article class="card app">
         <h2>app</h2>
         <ul>
-          <li><a href="http://localhost:{{APP_PORT}}" target="_blank" rel="noreferrer">{{APP_PORT}}</a></li>
+          <li><a href="http://localhost:{{APP_PORT}}" target="_blank" rel="noreferrer">app:{{APP_PORT}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
         </ul>
       </article>
       <article class="card server">
         <h2>server</h2>
         <ul>
-          <li><a href="http://localhost:{{SERVER_PORT}}" target="_blank" rel="noreferrer">{{SERVER_PORT}}</a></li>
+          <li><a href="http://localhost:{{SERVER_PORT}}" target="_blank" rel="noreferrer">server:{{SERVER_PORT}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
         </ul>
       </article>
       <article class="card database">
         <h2>database</h2>
         <ul>
-          <li><a href="https://local.drizzle.studio/?port={{DATABASE_STUDIO}}" target="_blank" rel="noreferrer">{{DATABASE_STUDIO}}</a></li>
+          <li><a href="https://local.drizzle.studio/?port={{DATABASE_STUDIO}}" target="_blank" rel="noreferrer">studio:{{DATABASE_STUDIO}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
         </ul>
       </article>
       <article class="card firebase">
         <h2>firebase</h2>
         <ul>
-          <li><a href="http://localhost:{{FIREBASE_UI_PORT}}" target="_blank" rel="noreferrer">{{FIREBASE_UI_PORT}}</a></li>
+          <li><a href="http://localhost:{{FIREBASE_UI_PORT}}" target="_blank" rel="noreferrer">ui:{{FIREBASE_UI_PORT}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
+        </ul>
+      </article>
+      <article class="card firebase">
+        <h2>opencode</h2>
+        <ul>
+          <li><a href="http://localhost:{{OPENCODE_APP_PORT}}" target="_blank" rel="noreferrer">app:{{OPENCODE_APP_PORT}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
+          <li><a href="http://localhost:{{OPENCODE_SERVER_PORT}}" target="_blank" rel="noreferrer">server:{{OPENCODE_SERVER_PORT}}<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></a></li>
         </ul>
       </article>
     </div>
