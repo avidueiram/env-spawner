@@ -13,10 +13,10 @@ services:
       - |
         mkdir -p /www &&
         sed \
+          -e "s#{{ENVIRONMENT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
           -e "s#{{ENVIRONMENT_NAME}}#${ENVIRONMENT_NAME}#g" \
           -e "s#{{APP_PORT}}#${APP_PORT}#g" \
-          -e "s#{{SERVER_PORT}}#${SERVER_PORT}#g" \
-          -e "s#{{POSTGRES_PORT}}#${POSTGRES_PORT}#g" \
+          -e "s#{{APP_PLAYWRIGHT_PORT}}#${APP_PLAYWRIGHT_PORT}#g" \
           -e "s#{{DATABASE_STUDIO}}#${DATABASE_STUDIO}#g" \
           -e "s#{{FIREBASE_AUTH_PORT}}#${FIREBASE_AUTH_PORT}#g" \
           -e "s#{{FIREBASE_FUNCTIONS_PORT}}#${FIREBASE_FUNCTIONS_PORT}#g" \
@@ -25,7 +25,8 @@ services:
           -e "s#{{FIREBASE_UI_PORT}}#${FIREBASE_UI_PORT}#g" \
           -e "s#{{OPENCODE_APP_PORT}}#${OPENCODE_APP_PORT}#g" \
           -e "s#{{OPENCODE_SERVER_PORT}}#${OPENCODE_SERVER_PORT}#g" \
-          -e "s#{{ENVIRONMENT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
+          -e "s#{{POSTGRES_PORT}}#${POSTGRES_PORT}#g" \
+          -e "s#{{SERVER_PORT}}#${SERVER_PORT}#g" \
           /var/templates/environment-hub.html >/www/index.html &&
         exec npx --yes http-server /www -p 8080 -a 0.0.0.0 --silent -c-1
    
