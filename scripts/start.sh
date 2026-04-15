@@ -32,7 +32,7 @@ fi
 
 if [ -f "environments/$project.postcompose.sh" ]; then
     echo "[$script_name]▶ Running postcompose script..."
-    # source "environments/$project.postcompose.sh"
+    source "environments/$project.postcompose.sh"
 else
     echo "[$script_name]▶ No postcompose script found"
 fi
