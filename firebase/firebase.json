@@ -1,13 +1,15 @@
 {
   "firestore": {
+    "database": "(default)",
+    "location": "nam5",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "functions": [
     {
-      "source": ".",
+      "source": "functions",
       "codebase": "default",
-      "runtime": "nodejs22",
+      "disallowLegacyRuntimeConfig": true,
       "ignore": [
         "node_modules",
         ".git",
@@ -17,49 +19,55 @@
       ]
     }
   ],
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "storage": {
     "rules": "storage.rules"
   },
   "emulators": {
-    "singleProjectMode": true,
     "auth": {
-      "host": "0.0.0.0",
       "port": 9099
     },
-    "eventarc": {
-      "host": "0.0.0.0",
-      "port": 9299
-    },
     "functions": {
-      "host": "0.0.0.0",
       "port": 5001
     },
-    "hub": {
-      "host": "0.0.0.0",
-      "port": 4400
+    "firestore": {
+      "port": 8080
     },
-    "logging": {
-      "host": "0.0.0.0",
-      "port": 4500
+    "hosting": {
+      "port": 6001
     },
     "pubsub": {
-      "host": "0.0.0.0",
       "port": 8085
     },
     "storage": {
-      "host": "0.0.0.0",
       "port": 9199
     },
+    "eventarc": {
+      "port": 9299
+    },
     "tasks": {
-      "host": "0.0.0.0",
       "port": 9499
     },
     "ui": {
+      "port": 6001,
       "enabled": true
     },
-    "firestore": {
-      "host": "0.0.0.0",
-      "port": 8080
-    }
+    "singleProjectMode": true
+  },
+  "auth": {
+    "providers": {}
   }
 }

@@ -26,8 +26,8 @@ npm install -g .
 ## Available commands
 
 ```bash
-# Builds the reusable image `env-spawner` from `Dockerfile`.
-env-spawner build
+# Builds the reusable image `env-spawner-firebase` from `Dockerfile-firebase`.
+env-spawner build:firebase
 
 # Starts one environment using `compose.yaml` + `environments/<environment>.yaml`.
 env-spawner start <environment>

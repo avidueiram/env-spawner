@@ -6,6 +6,7 @@
   "scripts": {
     "attach": "./scripts/attach.sh",
     "build": "docker build -t env-spawner .",
+    "build:firebase": "docker build -f Dockerfile-firebase -t env-spawner-firebase . --no-cache && docker images env-spawner-firebase",
     "kill": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -f",
     "list": "docker ps --filter \"label=env-spawner=true\"",
     "start": "./scripts/start.sh"

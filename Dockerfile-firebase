@@ -1,0 +1,21 @@
+FROM node:24-alpine
+
+# Basic packages
+RUN apk add --no-cache \
+  openjdk21-jre
+
+# Install Firebase CLI
+RUN npm install -g firebase-tools
+
+# Copy firebase directory to workspace
+COPY firebase firebase
+
+# Install dependencies
+RUN cd firebase/functions && npm install
+
+# Run emulators
+RUN cd firebase && firebase emulators:exec "echo 'Firebase emulators are ready'" --project demo-env-spawner
+
+WORKDIR /workspace
+
+CMD ["sh"]
