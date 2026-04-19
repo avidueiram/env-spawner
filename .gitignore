@@ -1,9 +1,3 @@
-environments/*.yaml
-!environments/example-a.yaml
-!environments/example-b.yaml
-
-environments/.env.*
-
-environments/*.postcompose.sh
+projects/*
 
 node_modules/
