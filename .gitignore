@@ -2,3 +2,5 @@ projects/*
 !projects/.gitkeep
 
 node_modules/
+
+build/

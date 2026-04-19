@@ -20,63 +20,32 @@ This is especially useful when you want multiple copies of the same platform run
 
 ```bash
 bun install
+bun run build
 npm install -g .
 ```
 
 ## Available commands
 
 ```bash
+# Builds the reusable image `env-spawner-app` from `Dockerfile-app`.
+env-spawner build:app
+
 # Builds the reusable image `env-spawner-firebase` from `Dockerfile-firebase`.
 env-spawner build:firebase
 
-# Starts one environment using `compose.yaml` + `environments/<environment>.yaml`.
-env-spawner start <environment>
+# Builds the reusable image `env-spawner-server` from `Dockerfile-server`.
+env-spawner build:server
 
-# Attaches shell to the running `env-spawner` service.
-env-spawner attach <environment>
+# Start env-spawner interactive mode.
+env-spawner
 
-# Lists all environments spawned.
-env-spawner list
+# Starts one project environment using `compose.yaml` + `projects/<project>/compose.yaml` + `projects/<project>/environments/.env.<environment>`.
+env-spawner start <project> <environment>
 
-# Stops/removes all environments spawned.
-env-spawner stop
+# Stops/removes one project environment spawned.
+env-spawner stop <project> <environment>
 ```
 
 ## Typical workflow
 
-### Add a new environment
-
-Create a new overlay file named `<environment>.yaml` in `environments/` directory. You can use the `example-a.yaml` and `example-b.yaml` as a reference.
-
-Example: `example-a.yaml`
-
-### Build the base image
-
-You can build the base image with `env-spawner build` command. If you need to add or remove any tools, you can edit the `Dockerfile` file and then build the image again.
-
-### Start & attach to an environment
-
-```bash
-# Start an environment
-env-spawner start example-a
-
-# Attach to an environment
-env-spawner attach example-a
-
-# You will be attached to the environment shell, then you can run the commands you need inside the container.
-# For example, if you want to run the frontend, you can run:
-cd example
-npm run start
-
-# Then you can quit from the environment shell with:
-exit
-
-# You can list all environments spawned with:
-env-spawner list
-
-# You can stop/remove an environment with:
-env-spawner stop example-a
-
-# Or you can stop/remove all environments spawned with:
-env-spawner stop
-```
+WIP

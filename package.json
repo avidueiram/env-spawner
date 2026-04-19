@@ -5,16 +5,38 @@
   "main": "index.js",
   "scripts": {
     "attach": "./scripts/attach.sh",
-    "build": "docker build -t env-spawner . && docker images env-spawner",
+    "build": "tsc",
     "build:app": "docker build -f Dockerfile-app -t env-spawner-app . && docker images env-spawner-app",
     "build:firebase": "docker build -f Dockerfile-firebase -t env-spawner-firebase . && docker images env-spawner-firebase",
     "build:server": "docker build -f Dockerfile-server -t env-spawner-server . && docker images env-spawner-server",
+    "lint": "eslint . --ext .js,.ts",
     "list": "docker ps --filter \"label=env-spawner=true\"",
     "start": "./scripts/start.sh",
+    "start:cli": "tsc && node build/main.js",
     "stop": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -fv"
   },
   "bin": {
-    "env-spawner": "./bin/main.js"
+    "env-spawner": "./build/main.js"
+  },
+  "dependencies": {
+    "@inquirer/rawlist": "5.2.8",
+    "@inquirer/select": "5.1.4",
+    "inquirer": "13.4.2"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "3.1.0",
+    "@types/node": "22.19.17",
+    "@typescript-eslint/eslint-plugin": "8.58.1",
+    "@typescript-eslint/parser": "8.58.1",
+    "eslint": "9.39.4",
+    "eslint-config-google": "0.14.0",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-import-newlines": "1.4.1",
+    "eslint-plugin-sort-keys": "2.3.5",
+    "ts-node": "10.9.2",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.58.1"
   },
   "keywords": [],
   "author": "Alfredo Vidueira",
