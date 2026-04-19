@@ -16,7 +16,7 @@ RUN [ -e /root/.bun/bin/bunx ] || ln -s /root/.bun/bin/bun /root/.bun/bin/bunx
 RUN bun install -g firebase-tools
 
 # Copy firebase directory to workspace
-COPY firebase firebase
+COPY container-data/firebase firebase
 
 # Install dependencies
 RUN cd firebase/functions && bun install
