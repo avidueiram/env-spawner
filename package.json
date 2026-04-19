@@ -11,7 +11,7 @@
     "build:server": "docker build -f Dockerfile-server -t env-spawner-server . && docker images env-spawner-server",
     "list": "docker ps --filter \"label=env-spawner=true\"",
     "start": "./scripts/start.sh",
-    "stop": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -f"
+    "stop": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -fv"
   },
   "bin": {
     "env-spawner": "./bin/main.js"
