@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "attach": "./scripts/attach.sh",
-    "build": "docker build -t env-spawner .",
+    "build": "docker build -t env-spawner . && docker images env-spawner",
+    "build:app": "docker build -f Dockerfile-app -t env-spawner-app . && docker images env-spawner-app",
     "build:firebase": "docker build -f Dockerfile-firebase -t env-spawner-firebase . && docker images env-spawner-firebase",
     "kill": "docker ps -aq --filter \"label=env-spawner=true\" | xargs -r docker rm -f",
     "list": "docker ps --filter \"label=env-spawner=true\"",
