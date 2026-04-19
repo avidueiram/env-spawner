@@ -39,7 +39,7 @@ env-spawner attach <environment>
 env-spawner list
 
 # Stops/removes all environments spawned.
-env-spawner kill
+env-spawner stop
 ```
 
 ## Typical workflow
@@ -75,8 +75,8 @@ exit
 env-spawner list
 
 # You can stop/remove an environment with:
-env-spawner kill example-a
+env-spawner stop example-a
 
 # Or you can stop/remove all environments spawned with:
-env-spawner kill
+env-spawner stop
 ```

@@ -10,13 +10,13 @@ const scripts = {
   start: { type: 'script', path: 'scripts/start.sh' },
   attach: { type: 'script', path: 'scripts/attach.sh' },
   build: { type: 'docker', cmd: 'docker', argv: ['build', '-t', 'env-spawner', '.'] },
-  kill:  { type: 'docker', cmd: 'bash', argv: ['-c', 'docker ps -aq --filter "label=env-spawner=true" | xargs -r docker rm -f'] },
+  stop:  { type: 'docker', cmd: 'bash', argv: ['-c', 'docker ps -aq --filter "label=env-spawner=true" | xargs -r docker rm -f'] },
   list:  { type: 'docker', cmd: 'docker', argv: ['ps', '--filter', 'label=env-spawner=true'] },
 };
 
 const spec = scripts[subcommand];
 if (!spec) {
-  console.error('Usage: env-spawner <start|attach|build|kill|list> [args...]');
+  console.error('Usage: env-spawner <start|attach|build|stop|list> [args...]');
   process.exit(1);
 }
 
