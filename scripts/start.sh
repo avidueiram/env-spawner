@@ -11,28 +11,28 @@ print_start
 check_args "$project"
 check_args "$environment"
 
-source "environments/.env.$environment"
+source "projects/$project/environments/.env.$environment"
 
 echo "[$script_name]▶ Starting environment..."
 if ! docker compose \
     -p "$project-$environment" \
-    --env-file "environments/.env.$environment" \
+    --env-file "projects/$project/environments/.env.$environment" \
     -f "compose.yaml" \
-    -f "environments/$project.yaml" \
+    -f "projects/$project/compose.yaml" \
     up -d; then
     print_error "Failed to start environment"
 fi
 
 echo "[$script_name]▶ Opening environment hub in browser..."
 if ls /Applications | grep -qi "Brave Browser"; then
-    open -na "Brave Browser" --args --new-window "http://localhost:${ENVIRONMENT_HUB_PORT}/"
+    open -na "Brave Browser" --args --new-window "http://localhost:${PROJECT_HUB_PORT}/"
 else
-    open -na "Google Chrome" --args --new-window "http://localhost:${ENVIRONMENT_HUB_PORT}/"
+    open -na "Google Chrome" --args --new-window "http://localhost:${PROJECT_HUB_PORT}/"
 fi
 
-if [ -f "environments/$project.postcompose.sh" ]; then
+if [ -f "projects/$project/postcompose.sh" ]; then
     echo "[$script_name]▶ Running postcompose script..."
-    source "environments/$project.postcompose.sh"
+    source "projects/$project/postcompose.sh"
 else
     echo "[$script_name]▶ No postcompose script found"
 fi

@@ -13,7 +13,8 @@ services:
       - |
         mkdir -p /www &&
         sed \
-          -e "s#{{PROJECT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
+          -e "s#{{PROJECT_HUB_PORT}}#${PROJECT_HUB_PORT}#g" \
+          -e "s#{{PROJECT_NAME}}#${PROJECT_NAME}#g" \
           -e "s#{{ENVIRONMENT_NAME}}#${ENVIRONMENT_NAME}#g" \
           -e "s#{{APP_PORT}}#${APP_PORT}#g" \
           -e "s#{{APP_PLAYWRIGHT_PORT}}#${APP_PLAYWRIGHT_PORT}#g" \
