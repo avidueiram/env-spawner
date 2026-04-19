@@ -1,19 +1,19 @@
 services:
-  environment-hub:
-    image: node:22-alpine
+  project-hub:
+    image: node:24-alpine
     labels:
       env-spawner: "true"
     ports:
-      - "${ENVIRONMENT_HUB_PORT}:8080"
+      - "${PROJECT_HUB_PORT}:8080"
     volumes:
-      - ./environment-hub.html:/var/templates/environment-hub.html:ro
+      - ./container-data/project-hub/index.html:/var/templates/index.html:ro
     command:
       - sh
       - -c
       - |
         mkdir -p /www &&
         sed \
-          -e "s#{{ENVIRONMENT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
+          -e "s#{{PROJECT_HUB_PORT}}#${ENVIRONMENT_HUB_PORT}#g" \
           -e "s#{{ENVIRONMENT_NAME}}#${ENVIRONMENT_NAME}#g" \
           -e "s#{{APP_PORT}}#${APP_PORT}#g" \
           -e "s#{{APP_PLAYWRIGHT_PORT}}#${APP_PLAYWRIGHT_PORT}#g" \
@@ -27,6 +27,6 @@ services:
           -e "s#{{OPENCODE_SERVER_PORT}}#${OPENCODE_SERVER_PORT}#g" \
           -e "s#{{POSTGRES_PORT}}#${POSTGRES_PORT}#g" \
           -e "s#{{SERVER_PORT}}#${SERVER_PORT}#g" \
-          /var/templates/environment-hub.html >/www/index.html &&
+          /var/templates/index.html >/www/index.html &&
         exec npx --yes http-server /www -p 8080 -a 0.0.0.0 --silent -c-1
    
